@@ -10,14 +10,14 @@
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = new LocalStrategy({
-		useridField : 'id',
-		userpasswordField : 'password',
+		usernameField : 'userid',
+		passwordField : 'userpassword',
 		passReqToCallback : true   // 이 옵션을 설정하면 아래 콜백 함수의 첫번째 파라미터로 req 객체 전달됨
-	}, function(req, id, password, done) {
-		console.log('passport의 local-login 호출됨 : ' + id + ', ' + password);
+	}, function(req, userid, userpassword, done) {
+		console.log('passport의 local-login 호출됨 : ' + userid + ', ' + userpassword);
 
 		var database = req.app.get('database');
-	    database.UserModel.findOne({ 'id' :  id }, function(err, user) {
+	    database.UserModel.findOne({ 'id' :  userid }, function(err, user) {
 	    	if (err) { return done(err); }
 
 	    	// 등록된 사용자가 없는 경우
@@ -27,7 +27,7 @@ module.exports = new LocalStrategy({
 	    	}
 
 	    	// 비밀번호 비교하여 맞지 않는 경우
-			var authenticated = user.authenticate(password, user._doc.salt, user._doc.hashed_password);
+			var authenticated = user.authenticate(userpassword, user._doc.salt, user._doc.hashed_password);
 			if (!authenticated) {
 				console.log('비밀번호 일치하지 않음.');
 				return done(null, false, req.flash('loginMessage', '비밀번호가 일치하지 않습니다.'));  // 검증 콜백에서 두 번째 파라미터의 값을 false로 하여 인증 실패한 것으로 처리

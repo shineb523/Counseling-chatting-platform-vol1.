@@ -40,6 +40,16 @@ module.exports = function(router, passport) {
         res.render('signup2_account_creation.ejs');
     });
 
+    router.route('/selection').get(function(req, res) {
+        console.log('/selection 패스 요청됨.');
+        res.render('selection.ejs');
+    });
+
+    router.route('/signup_success').get(function(req, res) {
+        console.log('/signup_success 패스 요청됨.');
+        res.render('signup_success.ejs', {user: req.user});
+    });
+
 
     // 프로필 화면
     router.route('/profile').get(function(req, res) {
@@ -76,14 +86,14 @@ module.exports = function(router, passport) {
 
     // 로그인 인증
     router.route('/login').post(passport.authenticate('local-login', {
-        successRedirect : '/select',
+        successRedirect : '/selection',
         failureRedirect : '/signin_failed_authentication',
         failureFlash : true
     }));
 
     // 회원가입 인증
     router.route('/signup').post(passport.authenticate('local-signup', {
-        successRedirect : '/profile',
+        successRedirect : '/signup_success',
         failureRedirect : '/signup2_account_creation',
         failureFlash : true
     }));
