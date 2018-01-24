@@ -18,10 +18,14 @@ module.exports = function(router, passport) {
         // 인증 안된 경우
         if (!req.user) {
             console.log('사용자 인증 안된 상태임.');
-            res.render('index_signin.ejs', {login_success:false});
+            res.render('index_signin.ejs', {
+                login_success: false
+            });
         } else {
             console.log('사용자 인증된 상태임.');
-            res.render('selection.ejs', {login_success:true});
+            res.render('selection.ejs', {
+                login_success: true
+            });
         }
     });
 
@@ -47,55 +51,39 @@ module.exports = function(router, passport) {
 
     router.route('/signup_success').get(function(req, res) {
         console.log('/signup_success 패스 요청됨.');
-        res.render('signup_success.ejs', {user: req.user});
+        res.render('signup_success.ejs', {
+            user: req.user
+        });
     });
 
-
-    // 프로필 화면
-    router.route('/profile').get(function(req, res) {
-        console.log('/profile 패스 요청됨.');
-
-        // 인증된 경우, req.user 객체에 사용자 정보 있으며, 인증안된 경우 req.user는 false값임
-        console.log('req.user 객체의 값');
-        console.dir(req.user);
-
-        // 인증 안된 경우
-        if (!req.user) {
-            console.log('사용자 인증 안된 상태임.');
-            res.redirect('/');
-        } else {
-            console.log('사용자 인증된 상태임.');
-            console.log('/profile 패스 요청됨.');
-            console.dir(req.user);
-
-            if (Array.isArray(req.user)) {
-                res.render('profile.ejs', {user: req.user[0]._doc});
-            } else {
-                res.render('profile.ejs', {user: req.user});
-            }
-        }
+    router.route('/logout').get(function(req, res) {
+        console.log('/logout 패스 요청됨.');
+        req.logout();
+        alert()
+        res.render('index_signin.ejs');
     });
+
 
     // 로그아웃
     router.route('/logout').get(function(req, res) {
         console.log('/logout 패스 요청됨.');
         req.logout();
-        res.redirect('/');
+        res.redirect('index_signin.ejs');
     });
 
 
     // 로그인 인증
     router.route('/login').post(passport.authenticate('local-login', {
-        successRedirect : '/selection',
-        failureRedirect : '/signin_failed_authentication',
-        failureFlash : true
+        successRedirect: '/selection',
+        failureRedirect: '/signin_failed_authentication',
+        failureFlash: true
     }));
 
     // 회원가입 인증
     router.route('/signup').post(passport.authenticate('local-signup', {
-        successRedirect : '/signup_success',
-        failureRedirect : '/signup2_account_creation',
-        failureFlash : true
+        successRedirect: '/signup_success',
+        failureRedirect: '/signup2_account_creation',
+        failureFlash: true
     }));
 
 };

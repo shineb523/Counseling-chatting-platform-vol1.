@@ -11,8 +11,8 @@
 var local_login = require('./passport/local_login');
 var local_signup = require('./passport/local_signup');
 
-module.exports = function (app, passport) {
-	console.log('config/passport 호출됨.');
+module.exports = function(app, passport) {
+    console.log('config/passport 호출됨.');
 
     // 사용자 인증 성공 시 호출
     // 사용자 정보를 이용해 세션을 만듦
@@ -21,7 +21,7 @@ module.exports = function (app, passport) {
         console.log('serializeUser() 호출됨.');
         console.dir(user);
 
-        done(null, user);  // 이 인증 콜백에서 넘겨주는 user 객체의 정보를 이용해 세션 생성
+        done(null, user); // 이 인증 콜백에서 넘겨주는 user 객체의 정보를 이용해 세션 생성
     });
 
     // 사용자 인증 이후 사용자 요청 시마다 호출
@@ -36,10 +36,10 @@ module.exports = function (app, passport) {
         done(null, user);
     });
 
-	// 인증방식 설정
-	passport.use('local-login', local_login);
-	passport.use('local-signup', local_signup);
+    // 인증방식 설정
+    passport.use('local-login', local_login);
+    passport.use('local-signup', local_signup);
 
-	console.log('2가지 passport 인증방식 설정됨.');
+    console.log('2가지 passport 인증방식 설정됨.');
 
 };

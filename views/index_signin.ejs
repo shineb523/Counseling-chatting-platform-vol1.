@@ -1,68 +1,34 @@
+<!-- 메인 로그인 화면 -->
+
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home</title>
     <style>
-        #title{
-            font-size: 67px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 70px;
-        }
-
-        #log_in{
-            border: 1px solid;
-            height: 320px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 45px;
-            width: 340px;
-        }
-
-        #login_form{
-            padding-top: 70px;
-            text-align: center;
-        }
-
-        #id_input, #password_input{
-            width: 230px;
-            height: 40px;
-            margin-bottom: 20px;
-        }
-
-        #password_input{
-            margin-bottom: 20px;
-        }
-
-        #signin_button, #signup_button{
-            width:110px;
-            height: 40px;
-            margin-left: 5px;
-            margin-right: 5px;
-        }
     </style>
 </head>
-<body>
-   <div id="outermost">
-       <div id="title">Title</div>
-       <div id="log_in">
-           <form id="login_form" method="post" action="/login">
-               <input id="id_input" name="userid" type="text" placeholder="ID">
-               <input id="password_input" name="userpassword" type="password" placeholder="PASSWORD">
-               <div id="login_button">
-                   <button id="signin_button" type="submit">sign-in</button>
-                   <a id="signup_button" href="/signup1_cellphone_authentication">sign-up</a>
-               </div>
-           </form>
-       </div>
-   </div>
 
-	<script
-	  src="https://code.jquery.com/jquery-3.2.1.min.js"
-	  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-	  crossorigin="anonymous"></script>
+<body>
+    <div id="outermost">
+        <div id="title">Title</div>
+        <div id="log_in">
+            <form id="login_form" method="post" action="/login">
+                <input id="id_input" name="userid" type="text" placeholder="ID">
+                <input id="password_input" name="userpassword" type="password" placeholder="PASSWORD">
+                <div id="login_button">
+                    <button id="signin_button" type="submit">sign-in</button>
+                    <a id="signup_button" href="/signup1_cellphone_authentication">sign-up</a>
+                    <a id="find_account" href="/find_account.ejs">find_account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 </body>
+
 </html>
