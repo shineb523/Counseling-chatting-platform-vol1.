@@ -12,6 +12,9 @@ module.exports = function(router, passport) {
     router.route('/').get(function(req, res) {
         console.log('/ 패스 요청됨.');
 
+        req.app.check=false;
+        console.log(req.app.check);
+
         console.log('req.user의 정보');
         console.dir(req.user);
 
@@ -74,8 +77,8 @@ module.exports = function(router, passport) {
     });
 
     // 비밀번호 수정 선택 시, 비밀번호 수정 페이지로 이동
-    router.route('/modifying_password').get(function(req, res) {
-        console.log('/modifying_password 패스 요청됨.');
+    router.route('/current_password_confirm').get(function(req, res) {
+        console.log('/current_password_confirm 패스 요청됨.');
         res.render('current_password_confirm.ejs');
     });
 
@@ -138,13 +141,16 @@ module.exports = function(router, passport) {
                 'id': req.user.id
             }, function(err, user) {
                 if (err) {
-                    return done(err);
+                    console.log(err);
+                    res.render('error.ejs');
+                    return;
                 }
 
                 // 등록된 사용자가 없는 경우
                 if (!user) {
                     console.log('세션 아이디가 데이터베이스에 존재하지 않거나, 세션이 존재하지 않음.');
-
+                    res.render('error.ejs');
+                    return;
                 }
 
                 // 비밀번호 비교하여 맞지 않는 경우
@@ -152,47 +158,77 @@ module.exports = function(router, passport) {
                 if (!authenticated) {
                     console.log('현재 비밀번호 일치하지 않음.');
                     res.render('current_password_confirm_failed.ejs');
+                    return;
                 }
 
-                // 정상인 경우
-                console.log('현재 비밀번호가 일치함.');
-                res.render('modify_password.ejs');
-
+                if((!err)&&user&&authenticated){
+                    // 정상인 경우
+                    console.log('현재 비밀번호가 일치함.');
+                    req.app.check=true;
+                    console.log(req.app.check);
+                    res.render('modify_password.ejs');
+                }
             });
         }
     });
 
-    // router.route('/modify_password').post(function(req, res) {
-    // 	console.log('/modify_password 호출됨.');
-    //
-    //     var tmp_id=req.body.tmp_id;
-    //     var new_password=req.body.new_password;
-    //
-    //     console.log('요청 파라미터 : ' + new_password);
-    //
-    //     // 데이터베이스 객체 참조
-    // 	var database = req.app.get('database');
-    //
-    //     if(database.db){
-    //         db.people.update( { "id":tmp_id }, { $set: { age: 20 } } )
-    //     }else{
-    //         res.render('database_connect_error.ejs');
-    //     }
-    //
-    // 	// UserModel 인스턴스 생성
-    // 	var user = new database.UserModel({"id":id, "password":password, "name":name});
-    //
-    // 	// save()로 저장
-    // 	user.save(function(err) {F
-    // 		if (err) {
-    // 			callback(err, null);
-    // 			return;
-    // 		}
-    //
-    // 	    console.log("사용자 데이터 추가함.");
-    // 	    callback(null, user);
-    //
-    // 	});
-    // });
+    router.route('/modify_password').post(function(req, res) {
+
+        var new_password=req.body.new_password;
+
+        console.log('/modify_password 패스 요청됨.');
+
+        console.log('req.user의 정보');
+        console.dir(req.user);
+
+        // 인증 안된 경우
+        if (!req.user) {
+            console.log('사용자 인증 안된 상태임.');
+            res.render('index_signin.ejs', {
+                login_success: false
+            });
+        } else {
+
+            if(!req.app.check){
+                console.log('현재 비밀번호 확인되지 않음.');
+                res.render('current_password_confirm.ejs');
+                return;
+            }
+
+            console.log('사용자 인증된 상태임.');
+
+            var database = req.app.get('database');
+            database.UserModel.findOne({
+                'id': req.user.id
+            }, function(err, user) {
+                if (err) {
+                    console.log(err);
+                    res.render('error.ejs');
+                    return;
+                }
+
+                // 등록된 사용자가 없는 경우
+                if (!user) {
+                    console.log('세션 아이디가 데이터베이스에 존재하지 않거나, 세션이 존재하지 않음.');
+                    res.render('error.ejs');
+                    return;
+                }
+
+                // 비밀번호 비교하여 맞지 않는 경우
+                var authenticated = user.authenticate(current_password, user._doc.salt, user._doc.hashed_password);
+                if (!authenticated) {
+                    console.log('현재 비밀번호 일치하지 않음.');
+                    res.render('current_password_confirm_failed.ejs');
+                    return;
+                }
+
+                if((!err)&&user&&authenticated){
+                    // 정상인 경우
+                    console.log('현재 비밀번호가 일치함.');
+                    res.render('modify_password.ejs');
+                }
+            });
+        }
+    });
 
 };
