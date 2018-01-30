@@ -142,6 +142,7 @@ module.exports = function(router, passport) {
             }, function(err, user) {
                 if (err) {
                     console.log(err);
+                    console.log('findOne 함수 호출 중 오류 발생.');
                     res.render('error.ejs');
                     return;
                 }
@@ -198,36 +199,23 @@ module.exports = function(router, passport) {
             console.log('사용자 인증된 상태임.');
 
             var database = req.app.get('database');
-            database.UserModel.findOne({
-                'id': req.user.id
-            }, function(err, user) {
-                if (err) {
-                    console.log(err);
-                    res.render('error.ejs');
-                    return;
-                }
 
-                // 등록된 사용자가 없는 경우
-                if (!user) {
-                    console.log('세션 아이디가 데이터베이스에 존재하지 않거나, 세션이 존재하지 않음.');
-                    res.render('error.ejs');
-                    return;
-                }
-
-                // 비밀번호 비교하여 맞지 않는 경우
-                var authenticated = user.authenticate(current_password, user._doc.salt, user._doc.hashed_password);
-                if (!authenticated) {
-                    console.log('현재 비밀번호 일치하지 않음.');
-                    res.render('current_password_confirm_failed.ejs');
-                    return;
-                }
-
-                if((!err)&&user&&authenticated){
-                    // 정상인 경우
-                    console.log('현재 비밀번호가 일치함.');
-                    res.render('modify_password.ejs');
-                }
+            var tmp = new database.UserModel({
+                'password':new_password
             });
+
+            database.UserModel.update({ id: req.user.id }, { $set: { hashed_password: tmp.hashed_password, salt:tmp.salt, updated_at:tmp.created_at}}, function(err, result){
+                if(err){
+                    console.log('update 함수 사용 중 에러');
+                    res.render('error.ejs');
+                    return;
+                }
+                console.log(result);
+                console.log('비밀번호 변경 완료.');
+            });
+
+            req.logout();
+            res.render('modify_password_success.ejs');
         }
     });
 

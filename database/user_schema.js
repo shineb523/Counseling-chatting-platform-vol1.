@@ -39,6 +39,10 @@ Schema.createSchema = function(mongoose) {
                 unique: false
             },
             'default': Date.now
+        },
+        tmp:{
+            type:String,
+            'default':'first'
         }
     });
 
