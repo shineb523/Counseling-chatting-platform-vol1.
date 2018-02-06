@@ -31,14 +31,14 @@ Schema.createSchema = function(mongoose) {
             index: {
                 unique: false
             },
-            'default': Date.now
+            'default': new Date()
         },
         updated_at: {
             type: Date,
             index: {
                 unique: false
             },
-            'default': Date.now
+            'default': new Date()
         },
         tmp:{
             type:String,

@@ -45,6 +45,11 @@
     <script>
         (jQuery)(function($) {
 
+            $.jsonRPC.setup({
+                endPoint:'http://localhost:3000/api',
+                namespace:''
+            });
+
             // 아이디 검사 정규표현식
             var id_pattern = /^(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-z0-9]{5,15})$/;
             // 비밀번호 검사 정규표현식
@@ -80,14 +85,39 @@
             var user_password_confirm = $("#user_password_confirm");
             var id_warning = $("#id_warning");
             var password_warning = $("#password_warning");
-            var password_confirm_warning = ("#password_confirm_warning");
 
             // 아이디 유효성 검사 (키 누를 때 마다 변경)
             user_id.keyup(function() {
 
                 if (id_pattern.test(user_id.val())) {
-                    // 아이디 필요조건을 모두 만족했을 때, 필요조건 메시지를 초록색 "OK"로 출력
-                    $("#id_required").text("OK").css("color", "green");
+
+                    var overlap_check_id=user_id.val();
+                    var id_overlap_check_jsonrpc_method='id_overlap_check';
+
+                    $.jsonRPC.request(id_overlap_check_jsonrpc_method, {
+                        id:001,
+                        params:[overlap_check_id],
+                        success:function(data){
+                            console.log('jsonRPC success 응답 받음.');
+                            if(data.result[0]=='o'){
+                                console.log('아이디 중복 체크 : 이미 아이디가 존재함. 생성 불가능한 아이디.');
+                                $("#id_required").text("동일 아이디 존재").css("color", "red");
+
+                            }else if (data.result[0]=='x') {
+                                // 아이디 필요조건을 모두 만족했을 때, 필요조건 메시지를 초록색 "OK"로 출력
+                                console.log('아이디 중복 체크 : 중복되는 아이디가 존재하지 않음. 생성 가능한 아이디.');
+                                $("#id_required").text("OK").css("color", "green");
+                            }
+
+                        },
+                        error:function(data){
+                            console.log('jsonRPC error 응답 받음.');
+                            console.log(data.error.code+', '+data.error.message);
+                            window.location.href='../views/error';
+                        }
+                    });
+
+
                 } else {
                     // 아이디 알파벳 존재 검사 정규표현식 만족 여부에 따라, 아이디 검사 배열의 알파벳 해당 값 변경
                     if (id_alphabet_pattern.test(user_id.val()) == false) {
