@@ -11,7 +11,7 @@ module.exports = {
         ,
     db_schemas: [{
             file: './user_schema',
-            collection: 'users1',
+            collection: 'users',
             schemaName: 'UserSchema',
             modelName: 'UserModel'
         }]

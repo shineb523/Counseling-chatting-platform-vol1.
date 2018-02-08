@@ -31,18 +31,22 @@ Schema.createSchema = function(mongoose) {
             index: {
                 unique: false
             },
-            'default': new Date()
+            'default': Date.now()
         },
         updated_at: {
             type: Date,
             index: {
                 unique: false
             },
-            'default': new Date()
+            'default': Date.now()
         },
-        tmp:{
-            type:String,
-            'default':'first'
+        withdrawal_at:{
+            type:Date,
+            'default':Date.now()
+        },
+        withdrawal_boolean:{
+            type:Boolean,
+            'default':false
         }
     });
 

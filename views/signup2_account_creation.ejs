@@ -50,6 +50,8 @@
                 namespace:''
             });
 
+            var overlap_check;
+
             // 아이디 검사 정규표현식
             var id_pattern = /^(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-z0-9]{5,15})$/;
             // 비밀번호 검사 정규표현식
@@ -102,11 +104,13 @@
                             if(data.result[0]=='o'){
                                 console.log('아이디 중복 체크 : 이미 아이디가 존재함. 생성 불가능한 아이디.');
                                 $("#id_required").text("동일 아이디 존재").css("color", "red");
+                                overlap_check=true;
 
                             }else if (data.result[0]=='x') {
                                 // 아이디 필요조건을 모두 만족했을 때, 필요조건 메시지를 초록색 "OK"로 출력
                                 console.log('아이디 중복 체크 : 중복되는 아이디가 존재하지 않음. 생성 가능한 아이디.');
                                 $("#id_required").text("OK").css("color", "green");
+                                overlap_check=false;
                             }
 
                         },
@@ -294,6 +298,13 @@
                     alert("PASSWORD와 PASSWORD_CONFIRM이 일치하지 않습니다.");
                     // 비밀번호 확인 입력 input 태그에 포커스를 주고,
                     user_password_confirm.focus();
+                    // submit(제출)을 취소한다.
+                    return false;
+                } else if (overlap_check==true) {
+                    // 경고창 출력 후,
+                    alert("동일한 아이디가 이미 가입되어 있습니다.");
+                    // 아이디 입력 input 태그에 포커스를 주고,
+                    user_id.focus();
                     // submit(제출)을 취소한다.
                     return false;
                 }

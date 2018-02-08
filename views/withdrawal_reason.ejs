@@ -18,15 +18,16 @@
     2. 탈퇴 사유 데이터 수집
     3. 계정 데이터 데이터베이스에서 삭제(2주동안 재가입 불가)
      -->
-    <form  action="/withdrawal_reason" method="post">
-        <select name="" id="">
+    <form  action="/withdrawal" method="post">
+        <select name="withdrawal_reason_dropdown" id="">
             <option value="a">a</option>
             <option value="b">b</option>
             <option value="c">c</option>
             <option value="d">d</option>
             <option value="e">e</option>
         </select>
-        <textarea name="name" rows="8" cols="60"></textarea>
+        <textarea name="withdrawal_reason_text" rows="8" cols="60"></textarea>
+        <input type="submit" value="제출">
     </form>
 
 </body>
