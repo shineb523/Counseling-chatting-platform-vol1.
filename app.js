@@ -36,7 +36,7 @@ var flash = require('connect-flash');
 var config = require('./config/config');
 
 // 모듈로 분리한 데이터베이스 파일 불러오기
-var database = require('./database/database');
+var database = require('./database/database_loader');
 
 // 모듈로 분리한 라우팅 파일 불러오기
 var route_loader = require('./routes/route_loader');
@@ -98,7 +98,7 @@ app.use(flash());
 
 //라우팅 정보를 읽어들여 라우팅 설정
 var router = express.Router();
-route_loader.init(app, router);
+route_loader(app, router);
 
 
 // 패스포트 설정
@@ -109,8 +109,9 @@ configPassport(app, passport);
 var userPassport = require('./routes/user_passport');
 userPassport(router, passport);
 
+
 var jsonrpc_api_path = config.jsonrpc_api_path || '/api';
-handler_loader.init(jayson, app, jsonrpc_api_path);
+handler_loader(jayson, app, jsonrpc_api_path);
 console.log('JSON-RPC를 [' + jsonrpc_api_path + '] 패스에서 사용하도록 설정함.');
 
 //===== 404 에러 페이지 처리 =====//

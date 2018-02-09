@@ -1,6 +1,6 @@
 /*
  * 핸들러 모듈을 로딩하여 설정
- * 
+ *
  * 핸들러 모듈 파일에 대한 정보는 handler_info.js에 기록함
  */
 
@@ -9,14 +9,9 @@ var handler_loader = {};
 var handler_info = require('./handler_info');
 var utils = require('jayson/lib/utils');
 
-
-handler_loader.init = function(jayson, app, api_path) {
-    console.log('handler_loader.init 호출됨.');
-    return initHandlers(jayson, app, api_path);
-}
-
 // handler_info에 정의된 핸들러 정보 처리
-function initHandlers(jayson, app, api_path) {
+module.exports = function initHandlers(jayson, app, api_path) {
+    console.log('handler_loader.init 호출됨.');
     var handlers = {};
 
     var infoLen = handler_info.length;
@@ -102,5 +97,3 @@ function initHandlers(jayson, app, api_path) {
 
     return handlers;
 }
-
-module.exports = handler_loader;
