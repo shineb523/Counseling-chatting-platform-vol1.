@@ -30,11 +30,11 @@ module.exports = function(req, res) {
             console.log('데이터베이스 연결 성공.');
 
 
-            var tmp = new database.UserModel({
+            var tmp = new database.user_account_model({
                 'password': new_password
             });
 
-            database.UserModel.update({
+            database.user_account_model.update({
                 id: req.user.id
             }, {
                 $set: {

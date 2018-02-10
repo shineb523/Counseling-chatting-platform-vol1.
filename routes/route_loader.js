@@ -7,30 +7,32 @@
  * @author Mike
  */
 
-var config = require('../config/config');
+var route_config = require('../config/config');
 
 
 // route_info에 정의된 라우팅 정보 처리
 module.exports = function initRoutes(app, router) {
-    var infoLen = config.route_info.length;
+    var infoLen = route_config.route_info.length;
     console.log('설정에 정의된 라우팅 모듈의 수 : %d', infoLen);
 
     for (var i = 0; i < infoLen; i++) {
-        var curItem = config.route_info[i];
+        var curItem = route_config.route_info[i];
 
-        var cur_method_path = require(curItem.method_path);
+		var cur_method = require(curItem.method_file_path);
 
-        console.log('%s 파일에서 모듈정보를 읽어옴.', curItem.file);
+        console.log('%s 파일에서 모듈함수를 읽어옴.', curItem.method_file_path);
 
         //  라우팅 처리
         if (curItem.type == 'get') {
-            router.route(curItem.path).get(cur_method_path);
+            router.route(curItem.path).get(cur_method);
         } else if (curItem.type == 'post') {
-            router.route(curItem.path).post(cur_method_path);
+            router.route(curItem.path).post(cur_method);
+        } else if (curItem.type == 'passportpost'){
+            router.route(curItem.path).post(cur_method);
         } else {
-            console.log('route_loader에서 오류 발생.');
+			console.log('route_loader에서 type 예외 오류 발생.');
             return;
-        }
+		}
 
 
 

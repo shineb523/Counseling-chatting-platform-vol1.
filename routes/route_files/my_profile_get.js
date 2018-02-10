@@ -2,4 +2,4 @@
 module.exports = function(req, res) {
 console.log('/my_profile 패스 요청됨.');
 res.render('my_profile.ejs');
-});
+}

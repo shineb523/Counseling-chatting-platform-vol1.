@@ -7,7 +7,7 @@ module.exports = function(req, res) {
     if (database.db) {
         console.log('데이터베이스 연결 성공.');
 
-        database.UserModel.find({}, function(err, results) {
+        database.user_account_model.find({}, function(err, results) {
             console.log('find 함수 요청됨.');
             if (err) {
                 console.log(err);
@@ -31,7 +31,7 @@ module.exports = function(req, res) {
                         console.log('withdrawal_day_diff : ', withdrawal_day_diff);
 
                         if (withdrawal_day_diff >= 14) {
-                            database.UserModel.deleteOne({}, function(err, resultObj) {
+                            database.user_account_model.deleteOne({}, function(err, resultObj) {
                                 if (err) {
                                     console.log('deleteOne 함수 호출 중 오류.');
                                     return done(err);

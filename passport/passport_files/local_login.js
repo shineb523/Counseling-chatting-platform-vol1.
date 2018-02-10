@@ -9,7 +9,7 @@
 
 var LocalStrategy = require('passport-local').Strategy;
 
-var local_login = new LocalStrategy({
+module.exports = new LocalStrategy({
     usernameField: 'userid',
     passwordField: 'userpassword',
     passReqToCallback: true // 이 옵션을 설정하면 아래 콜백 함수의 첫번째 파라미터로 req 객체 전달됨
@@ -17,7 +17,7 @@ var local_login = new LocalStrategy({
     console.log('passport의 local-login 호출됨');
 
     var database = req.app.get('database');
-    database.UserModel.findOne({
+    database.user_account_model.findOne({
         'id': userid
     }, function(err, user) {
         if (err) {
@@ -44,5 +44,3 @@ var local_login = new LocalStrategy({
     });
 
 });
-
-passport.use('local-login', local_login);

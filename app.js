@@ -102,12 +102,8 @@ route_loader(app, router);
 
 
 // 패스포트 설정
-var configPassport = require('./config/passport');
-configPassport(app, passport);
-
-// 패스포트 라우팅 설정
-var userPassport = require('./routes/user_passport');
-userPassport(router, passport);
+var configPassport = require('./passport/passport_init');
+configPassport(app, router, passport);
 
 
 var jsonrpc_api_path = config.jsonrpc_api_path || '/api';

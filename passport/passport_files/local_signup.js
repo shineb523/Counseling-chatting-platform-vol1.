@@ -9,7 +9,7 @@
 
 var LocalStrategy = require('passport-local').Strategy;
 
-var local_signup = new LocalStrategy({
+module.exports = new LocalStrategy({
     usernameField: 'userid',
     passwordField: 'userpassword',
     passReqToCallback: true // 이 옵션을 설정하면 아래 콜백 함수의 첫번째 파라미터로 req 객체 전달됨
@@ -20,7 +20,7 @@ var local_signup = new LocalStrategy({
     process.nextTick(function() {
 
         var database = req.app.get('database');
-        database.UserModel.findOne({
+        database.user_account_model.findOne({
             'id': userid
         }, function(err, user) {
             // 에러 발생 시
@@ -34,7 +34,7 @@ var local_signup = new LocalStrategy({
                 return done(null, false, req.flash('signupMessage', '계정이 이미 있습니다.')); // 검증 콜백에서 두 번째 파라미터의 값을 false로 하여 인증 실패한 것으로 처리
             } else {
                 // 모델 인스턴스 객체 만들어 저장
-                var user = new database.UserModel({
+                var user = new database.user_account_model({
                     'id': userid,
                     'password': userpassword
                 });
@@ -55,5 +55,3 @@ var local_signup = new LocalStrategy({
     });
 
 });
-
-passport.use('local-signup', local_signup);

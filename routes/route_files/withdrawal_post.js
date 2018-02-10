@@ -27,7 +27,7 @@ module.exports = function(req, res) {
         if (database.db) {
             console.log('데이터베이스 연결 성공.');
 
-            database.UserModel.update({
+            database.user_account_model.update({
                 id: req.user.id
             }, {
                 $set: {
