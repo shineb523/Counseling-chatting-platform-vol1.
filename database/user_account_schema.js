@@ -15,12 +15,11 @@ Schema.createSchema = function(mongoose) {
     var user_account_schema = mongoose.Schema({
         id: {
             type: String,
-            'default': ''
+            required: true
         },
         hashed_password: {
             type: String,
-            required: true,
-            'default': ''
+            required: true
         },
         salt: {
             type: String,
@@ -28,24 +27,22 @@ Schema.createSchema = function(mongoose) {
         },
         created_at: {
             type: Date,
-            index: {
-                unique: false
-            },
+            required: true,
             'default': Date.now()
         },
         updated_at: {
             type: Date,
-            index: {
-                unique: false
-            },
+            required: true,
             'default': Date.now()
         },
         withdrawal_at: {
             type: Date,
+            required: true,
             'default': Date.now()
         },
         withdrawal_boolean: {
             type: Boolean,
+            required: true,
             'default': false
         }
     });
